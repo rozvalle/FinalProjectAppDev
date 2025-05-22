@@ -64,7 +64,6 @@ class TriviaActivity : AppCompatActivity() {
 
                 updateScoreText()
 
-                // Disable buttons after answer selection
                 optionButtons.forEach { it.isEnabled = false }
             }
         }
