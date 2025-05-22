@@ -16,6 +16,12 @@
         android:layout_marginBottom="80dp"
         app:srcCompat="@drawable/trivialogo" />
 
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="299dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/trivia_categories" />
+
     <Button
         android:id="@+id/startTriviaButton"
         android:layout_width="300dp"
@@ -41,5 +47,12 @@
         android:backgroundTint="#00324b"
         android:text="Logout"
         app:cornerRadius="8dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="by: Francis Elmo Valeros"
+        android:textAlignment="center" />
 
 </LinearLayout>

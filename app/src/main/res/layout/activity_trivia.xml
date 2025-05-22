@@ -34,6 +34,14 @@
         android:textStyle="bold"
         android:layout_marginBottom="24dp"/>
 
+    <TextView
+        android:id="@+id/countdownText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
     <Button
         android:id="@+id/optionA"
         android:layout_width="match_parent"

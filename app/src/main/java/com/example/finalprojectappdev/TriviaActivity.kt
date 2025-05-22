@@ -1,6 +1,7 @@
 package com.example.finalprojectappdev
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Html
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -22,10 +23,12 @@ class TriviaActivity : AppCompatActivity() {
 
     private var currentQuestion: TriviaQuestion? = null
     private var shuffledOptions: List<String> = listOf()
+    private var selectedCategoryId: Int? = null
+    private lateinit var countdownText: TextView
 
     private var score = 0
     private var questionCount = 0
-    private val totalQuestions = 10
+    private val totalQuestions = 20
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -34,6 +37,12 @@ class TriviaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trivia)
 
+        selectedCategoryId = intent.getIntExtra("CATEGORY_ID", -1)
+        if (selectedCategoryId == -1) {
+            selectedCategoryId = null // API handles null as "Any Category"
+        }
+
+        countdownText = findViewById(R.id.countdownText)
         questionProgressText = findViewById(R.id.questionProgressText)
         questionText = findViewById(R.id.questionText)
         scoreText = findViewById(R.id.scoreText)  // Initialize scoreText here
@@ -65,13 +74,23 @@ class TriviaActivity : AppCompatActivity() {
                 updateScoreText()
                 optionButtons.forEach { it.isEnabled = false }
 
-                button.postDelayed({
-                    if (questionCount >= totalQuestions) {
-                        saveScore()
-                    } else {
-                        fetchQuestion()
+                countdownText.visibility = TextView.VISIBLE
+
+                object : CountDownTimer(5000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        val secondsLeft = millisUntilFinished / 1000
+                        countdownText.text = "Next question in $secondsLeft..."
                     }
-                }, 1000)
+
+                    override fun onFinish() {
+                        countdownText.visibility = TextView.GONE
+                        if (questionCount >= totalQuestions) {
+                            saveScore()
+                        } else {
+                            fetchQuestion()
+                        }
+                    }
+                }.start()
             }
         }
 
@@ -109,14 +128,18 @@ class TriviaActivity : AppCompatActivity() {
             return
         }
 
-        RetrofitInstance.api.getQuestion().enqueue(object : Callback<TriviaResponse> {
+        RetrofitInstance.api.getQuestion(category = selectedCategoryId).enqueue(object : Callback<TriviaResponse> {
             override fun onResponse(call: Call<TriviaResponse>, response: Response<TriviaResponse>) {
-                val question = response.body()?.results?.get(0)
-                if (question != null) {
+                val results = response.body()?.results
+                if (!results.isNullOrEmpty()) {
+                    val question = results[0]
                     currentQuestion = question
-                    displayQuestion(question)
                     questionCount++
                     updateQuestionProgress()
+                    displayQuestion(question)
+                } else {
+                    Toast.makeText(this@TriviaActivity, "No more questions found for this category. Try another one.", Toast.LENGTH_LONG).show()
+                    finish() // Or navigate back to MainActivity
                 }
             }
 

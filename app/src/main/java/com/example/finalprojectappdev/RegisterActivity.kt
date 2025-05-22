@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.*
@@ -34,13 +35,15 @@ class RegisterActivity : AppCompatActivity() {
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                // Navigate to Register screen here
                 val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
         }
 
         spannable.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        loginTextView.text = spannable
+        loginTextView.movementMethod = LinkMovementMethod.getInstance()
 
         val usernameEditText = findViewById<EditText>(R.id.username)
         val emailEditText = findViewById<EditText>(R.id.email)

@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">FinalProjectAppDev</string>
+    <string name="app_name">Trivia App</string>
+
+    <string-array name="trivia_categories">
+        <item>Any Category</item>
+        <item>General Knowledge</item>
+        <item>Books</item>
+        <item>Film</item>
+        <item>Music</item>
+        <item>Musicals and Theatres</item>
+        <item>Video Games</item>
+        <item>Science and Nature</item>
+        <item>Computers</item>
+        <item>Mathematics</item>
+        <item>Mythology</item>
+        <item>Sports</item>
+        <item>Geography</item>
+        <item>History</item>
+        <item>Animals</item>
+        <item>Comics</item>
+        <item>Anime and Manga</item>
+        <item>Cartoons and Animations</item>
+    </string-array>
 </resources>

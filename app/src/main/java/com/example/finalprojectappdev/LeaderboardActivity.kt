@@ -1,6 +1,7 @@
 package com.example.finalprojectappdev
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +29,13 @@ class LeaderboardActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         loadLeaderboard()
+
+        val backButton = findViewById<Button>(R.id.backButton)
+
+        backButton.setOnClickListener {
+            // Simply finish this activity to go back to the previous one (MainActivity)
+            finish()
+        }
     }
 
     private fun loadLeaderboard() {
