@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface TriviaApi {
-    @GET("api.php?amount=1&type=multiple&difficulty=easy")
+    @GET("api.php?amount=1&category=9&type=multiple&difficulty=easy")
     fun getQuestion(): Call<TriviaResponse>
 }

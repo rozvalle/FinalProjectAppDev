@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Disabled state -->
+    <item android:state_enabled="false" android:color="#808080" /> <!-- Gray for disabled -->
+    <!-- Pressed state -->
+    <item android:state_pressed="true" android:color="#005f78" /> <!-- Darker when pressed -->
+    <!-- Default (enabled) -->
+    <item android:color="#00324b" /> <!-- Your main button color -->
+</selector>

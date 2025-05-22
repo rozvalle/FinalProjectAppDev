@@ -17,8 +17,8 @@ class TriviaActivity : AppCompatActivity() {
 
     private lateinit var questionText: TextView
     private lateinit var optionButtons: List<Button>
-    private lateinit var nextButton: Button
-    private lateinit var scoreText: TextView   // Add this line
+    private lateinit var scoreText: TextView
+    private lateinit var questionProgressText: TextView
 
     private var currentQuestion: TriviaQuestion? = null
     private var shuffledOptions: List<String> = listOf()
@@ -34,6 +34,7 @@ class TriviaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trivia)
 
+        questionProgressText = findViewById(R.id.questionProgressText)
         questionText = findViewById(R.id.questionText)
         scoreText = findViewById(R.id.scoreText)  // Initialize scoreText here
         optionButtons = listOf(
@@ -42,7 +43,6 @@ class TriviaActivity : AppCompatActivity() {
             findViewById(R.id.optionC),
             findViewById(R.id.optionD)
         )
-        nextButton = findViewById(R.id.nextButton)
 
         score = 0
         questionCount = 0
@@ -63,18 +63,39 @@ class TriviaActivity : AppCompatActivity() {
                 }
 
                 updateScoreText()
-
                 optionButtons.forEach { it.isEnabled = false }
+
+                button.postDelayed({
+                    if (questionCount >= totalQuestions) {
+                        saveScore()
+                    } else {
+                        fetchQuestion()
+                    }
+                }, 1000)
             }
         }
 
-        nextButton.setOnClickListener {
-            if (questionCount >= totalQuestions) {
-                saveScore()
-            } else {
-                fetchQuestion()
-            }
+        val backButton = findViewById<Button>(R.id.backButton)
+
+        backButton.setOnClickListener {
+            showExitConfirmation()
         }
+    }
+
+    private fun showExitConfirmation() {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Exit Quiz")
+        builder.setMessage("Are you sure you want to go back? Your quiz progress will not be saved.")
+        builder.setPositiveButton("Yes") { _, _ ->
+            finish() // go back to MainActivity
+        }
+        builder.setNegativeButton("No", null)
+        builder.show()
+    }
+
+
+    private fun updateQuestionProgress() {
+        questionProgressText.text = "Question $questionCount/$totalQuestions"
     }
 
     private fun updateScoreText() {
@@ -95,6 +116,7 @@ class TriviaActivity : AppCompatActivity() {
                     currentQuestion = question
                     displayQuestion(question)
                     questionCount++
+                    updateQuestionProgress()
                 }
             }
 

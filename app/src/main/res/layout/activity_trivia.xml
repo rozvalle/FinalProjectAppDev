@@ -12,9 +12,18 @@
         android:id="@+id/scoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="Score: 0"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp" />
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/questionProgressText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Question 1/10"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/questionText"
@@ -30,6 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/button_color"
         android:text="Option A"
         app:cornerRadius="8dp" />
 
@@ -38,6 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/button_color"
         android:text="Option B"
         app:cornerRadius="8dp" />
 
@@ -46,6 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/button_color"
         android:text="Option C"
         app:cornerRadius="8dp" />
 
@@ -54,14 +66,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/button_color"
         android:text="Option D"
         app:cornerRadius="8dp" />
 
     <Button
-        android:id="@+id/nextButton"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next Question"
+        android:backgroundTint="#00324b"
+        android:text="Back"
         app:cornerRadius="8dp" />
 
 </LinearLayout>

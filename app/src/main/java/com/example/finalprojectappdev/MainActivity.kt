@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var logoutButton: Button
     private lateinit var startTriviaButton: Button
+    private lateinit var leaderboardButton: Button
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         logoutButton = findViewById(R.id.logoutButton)
         startTriviaButton = findViewById(R.id.startTriviaButton)
+        leaderboardButton = findViewById(R.id.leaderboardButton) // ← New line
 
         logoutButton.setOnClickListener {
             auth.signOut()
@@ -30,6 +32,11 @@ class MainActivity : AppCompatActivity() {
 
         startTriviaButton.setOnClickListener {
             val intent = Intent(this, TriviaActivity::class.java)
+            startActivity(intent)
+        }
+
+        leaderboardButton.setOnClickListener {
+            val intent = Intent(this, LeaderboardActivity::class.java)
             startActivity(intent)
         }
     }
