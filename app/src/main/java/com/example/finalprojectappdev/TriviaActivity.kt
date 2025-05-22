@@ -62,7 +62,7 @@ class TriviaActivity : AppCompatActivity() {
                     Toast.makeText(this, "Wrong! Correct: $correct", Toast.LENGTH_SHORT).show()
                 }
 
-                updateScoreText()  // Update score display after answer
+                updateScoreText()
 
                 // Disable buttons after answer selection
                 optionButtons.forEach { it.isEnabled = false }
