@@ -1,6 +1,7 @@
 package com.example.finalprojectappdev
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Html
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -17,15 +18,17 @@ class TriviaActivity : AppCompatActivity() {
 
     private lateinit var questionText: TextView
     private lateinit var optionButtons: List<Button>
-    private lateinit var nextButton: Button
-    private lateinit var scoreText: TextView   // Add this line
+    private lateinit var scoreText: TextView
+    private lateinit var questionProgressText: TextView
 
     private var currentQuestion: TriviaQuestion? = null
     private var shuffledOptions: List<String> = listOf()
+    private var selectedCategoryId: Int? = null
+    private lateinit var countdownText: TextView
 
     private var score = 0
     private var questionCount = 0
-    private val totalQuestions = 10
+    private val totalQuestions = 20
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -34,6 +37,13 @@ class TriviaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trivia)
 
+        selectedCategoryId = intent.getIntExtra("CATEGORY_ID", -1)
+        if (selectedCategoryId == -1) {
+            selectedCategoryId = null // API handles null as "Any Category"
+        }
+
+        countdownText = findViewById(R.id.countdownText)
+        questionProgressText = findViewById(R.id.questionProgressText)
         questionText = findViewById(R.id.questionText)
         scoreText = findViewById(R.id.scoreText)  // Initialize scoreText here
         optionButtons = listOf(
@@ -42,7 +52,6 @@ class TriviaActivity : AppCompatActivity() {
             findViewById(R.id.optionC),
             findViewById(R.id.optionD)
         )
-        nextButton = findViewById(R.id.nextButton)
 
         score = 0
         questionCount = 0
@@ -63,18 +72,49 @@ class TriviaActivity : AppCompatActivity() {
                 }
 
                 updateScoreText()
-
                 optionButtons.forEach { it.isEnabled = false }
+
+                countdownText.visibility = TextView.VISIBLE
+
+                object : CountDownTimer(5000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        val secondsLeft = millisUntilFinished / 1000
+                        countdownText.text = "Next question in $secondsLeft..."
+                    }
+
+                    override fun onFinish() {
+                        countdownText.visibility = TextView.GONE
+                        if (questionCount >= totalQuestions) {
+                            saveScore()
+                        } else {
+                            fetchQuestion()
+                        }
+                    }
+                }.start()
             }
         }
 
-        nextButton.setOnClickListener {
-            if (questionCount >= totalQuestions) {
-                saveScore()
-            } else {
-                fetchQuestion()
-            }
+        val backButton = findViewById<Button>(R.id.backButton)
+
+        backButton.setOnClickListener {
+            showExitConfirmation()
         }
+    }
+
+    private fun showExitConfirmation() {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Exit Quiz")
+        builder.setMessage("Are you sure you want to go back? Your quiz progress will not be saved.")
+        builder.setPositiveButton("Yes") { _, _ ->
+            finish()
+        }
+        builder.setNegativeButton("No", null)
+        builder.show()
+    }
+
+
+    private fun updateQuestionProgress() {
+        questionProgressText.text = "Question $questionCount/$totalQuestions"
     }
 
     private fun updateScoreText() {
@@ -88,13 +128,18 @@ class TriviaActivity : AppCompatActivity() {
             return
         }
 
-        RetrofitInstance.api.getQuestion().enqueue(object : Callback<TriviaResponse> {
+        RetrofitInstance.api.getQuestion(category = selectedCategoryId).enqueue(object : Callback<TriviaResponse> {
             override fun onResponse(call: Call<TriviaResponse>, response: Response<TriviaResponse>) {
-                val question = response.body()?.results?.get(0)
-                if (question != null) {
+                val results = response.body()?.results
+                if (!results.isNullOrEmpty()) {
+                    val question = results[0]
                     currentQuestion = question
-                    displayQuestion(question)
                     questionCount++
+                    updateQuestionProgress()
+                    displayQuestion(question)
+                } else {
+                    Toast.makeText(this@TriviaActivity, "No more questions found for this category. Try another one.", Toast.LENGTH_LONG).show()
+                    finish()
                 }
             }
 
