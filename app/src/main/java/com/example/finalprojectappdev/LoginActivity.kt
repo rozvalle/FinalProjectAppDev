@@ -21,7 +21,6 @@ class LoginActivity : AppCompatActivity() {
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
-            // User is already logged in, redirect to MainActivity
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
@@ -39,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                // Navigate to Register screen here
                 val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                 startActivity(intent)
             }

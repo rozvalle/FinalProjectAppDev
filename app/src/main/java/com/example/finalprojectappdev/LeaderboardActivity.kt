@@ -33,7 +33,6 @@ class LeaderboardActivity : AppCompatActivity() {
         val backButton = findViewById<Button>(R.id.backButton)
 
         backButton.setOnClickListener {
-            // Simply finish this activity to go back to the previous one (MainActivity)
             finish()
         }
     }

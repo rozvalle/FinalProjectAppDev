@@ -106,7 +106,7 @@ class TriviaActivity : AppCompatActivity() {
         builder.setTitle("Exit Quiz")
         builder.setMessage("Are you sure you want to go back? Your quiz progress will not be saved.")
         builder.setPositiveButton("Yes") { _, _ ->
-            finish() // go back to MainActivity
+            finish()
         }
         builder.setNegativeButton("No", null)
         builder.show()
@@ -139,7 +139,7 @@ class TriviaActivity : AppCompatActivity() {
                     displayQuestion(question)
                 } else {
                     Toast.makeText(this@TriviaActivity, "No more questions found for this category. Try another one.", Toast.LENGTH_LONG).show()
-                    finish() // Or navigate back to MainActivity
+                    finish()
                 }
             }
 

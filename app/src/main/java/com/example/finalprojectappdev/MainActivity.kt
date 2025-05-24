@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         logoutButton = findViewById(R.id.logoutButton)
         startTriviaButton = findViewById(R.id.startTriviaButton)
-        leaderboardButton = findViewById(R.id.leaderboardButton) // ← New line
+        leaderboardButton = findViewById(R.id.leaderboardButton)
 
         logoutButton.setOnClickListener {
             auth.signOut()
